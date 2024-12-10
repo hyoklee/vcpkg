@@ -9,7 +9,9 @@
       "name": "vcpkg-cmake",
       "host": true
     },
-    "hermes-shm"
+      "hermes-shm",
+      "thallium",
+      "yaml-cpp"
   ],
 
   "default-features": [],
