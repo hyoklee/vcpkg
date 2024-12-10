@@ -10,6 +10,7 @@
       "host": true
     },
       "hermes-shm",
+      "margo",
       "thallium",
       "yaml-cpp"
   ],
