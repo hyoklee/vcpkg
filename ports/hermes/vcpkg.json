@@ -1,0 +1,22 @@
+{
+  "name": "hermes",
+  "version": "1.1.0",
+  "homepage": "https://grc.iit.edu/research/projects/hermes",
+  "description": "Hermes is a heterogeneous-aware, multi-tiered, dynamic, and distributed I/O buffering system that aims to significantly accelerate I/O performance.",
+  "license": "BSD-3-Clause",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    "hermes-shm"
+  ],
+
+  "default-features": [],
+  "features": {
+    "example-feature": {
+      "description": "",
+      "dependencies": []
+    }
+  }
+}
