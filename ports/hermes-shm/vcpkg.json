@@ -9,14 +9,19 @@
       "name": "vcpkg-cmake",
       "host": true
     },
-      "cereal"      
+      "catch2",
+      "cereal"
   ],
 
-  "default-features": [],
+  "default-features": ["mpi","boost"],
   "features": {
-    "example-feature": {
-      "description": "",
-      "dependencies": []
+    "mpi": {
+      "description": "Build tests which depend on MPI",
+      "dependencies": ["mpi"]
+    },
+    "boost": {
+      "description": "Build tests which depend on libboost",
+      "dependencies": ["boost"]
     }
   }
 }
