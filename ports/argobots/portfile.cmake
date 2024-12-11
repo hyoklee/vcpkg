@@ -1,7 +1,7 @@
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/mochi-hpc/mochi-margo/archive/refs/tags/v0.18.3.tar.gz"
-    FILENAME "v0.18.3.tar.gz"
-    SHA512 8e3ddae8eb91c239f75b6f69abc53a274b40845aa381d983e6fed205bda9147cea85a4282a566ef440e6e2d74d67b423e1c443471ae93a6f2f01868e74570bf1
+    URLS "https://github.com/pmodels/argobots/archive/refs/tags/v1.2.tar.gz"
+    FILENAME "v1.2.tar.gz"
+    SHA512 4855615ca4a45b9a75c71f61ea19fecf88c0d93d45b1907f46bebd44545ca99c47574d70b3d90cbfb8780cc62ac6ccd2f1d17ef6511b00343a57237024cee5c0
 )
 
 vcpkg_extract_source_archive_ex(

@@ -1,16 +1,14 @@
 {
-  "name": "margo",
-  "version": "0.18.3",
-  "homepage": "https://github.com/mochi-hpc/mochi-margo",
-  "description": "A library that provides Argobots bindings to the Mercury RPC implementation.",
+  "name": "argobots",
+  "version": "1.2",
+  "homepage": "https://www.argobots.org/",
+  "description": "Argobots is a lightweight, low-level threading and tasking framework.",
   "license": "BSD-3-Clause",
   "dependencies": [
     {
       "name": "vcpkg-cmake",
       "host": true
-    },
-      "argobots",
-      "mercury"
+    }
   ],
 
   "default-features": [],
