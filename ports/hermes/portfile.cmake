@@ -10,11 +10,8 @@ vcpkg_from_github(
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    # OPTIONS -DBUILD_OpenMP_TESTS:BOOL=OFF
-    # PTIONS -DUSE_THIS_IN_ALL_BUILDS=1 -DUSE_THIS_TOO=2
-    # OPTIONS_RELEASE -DOPTIMIZE=1
-    # OPTIONS_DEBUG -DDEBUGGABLE=1
 )
 
 vcpkg_cmake_install()
 
+# vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
