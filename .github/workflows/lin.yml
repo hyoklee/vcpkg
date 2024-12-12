@@ -21,4 +21,5 @@ jobs:
           ./vcpkg install hermes
         continue-on-error: true
       - name: output
-        run: cat  /home/runner/work/vcpkg/vcpkg/buildtrees/margo/config-x64-linux-dbg-err.log
+        run: cat /home/runner/work/vcpkg/vcpkg/buildtrees/hermes/config-x64-linux-out.log
+
