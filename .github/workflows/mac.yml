@@ -14,9 +14,10 @@ jobs:
       - name: install
         run: |
           brew install automake boost libelf libomp libtool open-mpi
-          brew install llvm --with-openmp
       - name: test
         run: |
+           export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+           export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
           ./bootstrap-vcpkg.sh
           ./vcpkg install hermes
         continue-on-error: true
