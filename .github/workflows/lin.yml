@@ -8,8 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v4
+      - name: install
+        run:  |
+          sudo apt-get update
+          sudo apt-get install libboost-dev
       - name: test
         shell: bash
         run: |
