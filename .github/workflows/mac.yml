@@ -16,8 +16,10 @@ jobs:
           brew install automake boost libelf libomp libtool open-mpi
       - name: test
         run: |
+          ls /opt/homebrew/opt/libomp/lib
           export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
           export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+          export DYLD_LIBRARY_PATH="/opt/homebrew/opt/libomp/lib:$DYLD_LIBRARY_PATH"
           ./bootstrap-vcpkg.sh
           ./vcpkg install hermes
         continue-on-error: true
