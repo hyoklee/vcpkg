@@ -13,7 +13,7 @@ jobs:
       - name: install
         run:  |
           sudo apt-get update
-          sudo apt-get install libboost-dev
+          sudo apt-get install libboost-dev openmpi-bin openmpi-common mpi-default-dev
       - name: test
         shell: bash
         run: |
