@@ -9,6 +9,7 @@
       "name": "vcpkg-cmake",
       "host": true
     },
+      "catch2",
       "cereal"
   ]
 }

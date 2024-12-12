@@ -22,4 +22,3 @@ jobs:
         continue-on-error: true
       - name: output
         run: cat /home/runner/work/vcpkg/vcpkg/buildtrees/hermes-shm/config-x64-linux-out.log
-      
