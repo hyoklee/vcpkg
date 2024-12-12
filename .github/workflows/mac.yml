@@ -18,8 +18,8 @@ jobs:
         run: |
           ls /opt/homebrew/opt/libomp/lib
           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-          export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
-          export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+          export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/libomp/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/libomp/include"
           export DYLD_LIBRARY_PATH="/opt/homebrew/opt/libomp/lib:$DYLD_LIBRARY_PATH"
           export OpenMP_C_FLAGS="-fopenmp"
           export OpenMP_C_LIB_NAMES="omp"
