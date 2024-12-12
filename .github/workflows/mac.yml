@@ -14,6 +14,7 @@ jobs:
       - name: install
         run: |
           brew install automake boost libelf libomp libtool open-mpi
+          brew install llvm --with-openmp
       - name: test
         run: |
           ./bootstrap-vcpkg.sh
