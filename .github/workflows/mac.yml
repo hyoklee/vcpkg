@@ -22,9 +22,13 @@ jobs:
           export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/libomp/include"
           export DYLD_LIBRARY_PATH="/opt/homebrew/opt/libomp/lib:$DYLD_LIBRARY_PATH"
           export OpenMP_C_FLAGS="-fopenmp"
-          export OpenMP_C_LIB_NAMES="omp"
-          export OpenMP_C_INCLUDE_DIRS="/opt/homebrew/opt/libomp/include"
-          export OpenMP_C_LIBRARY_DIRR="/opt/homebrew/opt/libomp/lib"
+          export OpenMP_C_INCLUDE_DIR="/opt/homebrew/opt/libomp/include"
+          export OpenMP_C_LIB_NAMES="libomp"
+          export OpenMP_C_LIBRARY_DIR="/opt/homebrew/opt/libomp/lib"
+          export OpenMP_CXX_FLAG="-Xclang -fopenmp"
+          export OpenMP_CXX_INCLUDE_DIR="/opt/homebrew/opt/libomp/include"
+          export OpenMP_CXX_LIB_NAMES="libomp"
+          export OpenMP_libomp_LIBRARY="/opt/homebrew/opt/libomp/lib/libomp.dylib"
           ./bootstrap-vcpkg.sh
           ./vcpkg install hermes
         continue-on-error: true
