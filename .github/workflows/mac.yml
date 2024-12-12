@@ -30,6 +30,13 @@ jobs:
           export OpenMP_CXX_FLAG="-Xclang -fopenmp"
           export OpenMP_CXX_INCLUDE_DIR="/opt/homebrew/opt/libomp/include"
           export OpenMP_CXX_LIB_NAMES="libomp"
+          export VCPKG_C_FLAGS="-Xclang -fopenmp"
+          export VCPKG_C_LIB_NAMES="omp"
+          export VCPKG_C_INCLUDE_DIR="/opt/homebrew/opt/libomp/include"
+          export VCPKG_C_LIBRARY_DIR="/opt/homebrew/opt/libomp/lib"
+          export VCPKG_CXX_FLAG="-Xclang -fopenmp"
+          export VCPKG_CXX_INCLUDE_DIR="/opt/homebrew/opt/libomp/include"
+          export VCPKG_CXX_LIB_NAMES="libomp"	  
           env
           ./vcpkg install hermes
         continue-on-error: true
