@@ -17,6 +17,7 @@ jobs:
       - name: test
         run: |
           ls /opt/homebrew/opt/libomp/lib
+          ./bootstrap-vcpkg.sh
           export OpenMP_ROOT=$(brew --prefix)/opt/libomp
           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
           export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/libomp/lib"
@@ -29,7 +30,7 @@ jobs:
           export OpenMP_CXX_FLAG="-Xclang -fopenmp"
           export OpenMP_CXX_INCLUDE_DIR="/opt/homebrew/opt/libomp/include"
           export OpenMP_CXX_LIB_NAMES="libomp"
-          ./bootstrap-vcpkg.sh
+          env
           ./vcpkg install hermes
         continue-on-error: true
       - name: output
