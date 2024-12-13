@@ -1,5 +1,5 @@
----- a/include/hermes_shm/introspect/system_info.h
--+++ b/include/hermes_shm/introspect/system_info.h
+--- a/include/hermes_shm/introspect/system_info.h
++++ b/include/hermes_shm/introspect/system_info.h
 @@ -14,7 +14,6 @@
  #define HERMES_SYSINFO_INFO_H_
  
