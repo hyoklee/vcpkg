@@ -20,7 +20,6 @@ jobs:
           export CC=/opt/homebrew/opt/llvm/bin/clang
           export CXX=/opt/homebrew/opt/llvm/bin/clang++
           which clang
-          export OpenMP_ROOT=$(brew --prefix)/opt/libomp
           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
           export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/libomp/lib"
           export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/libomp/include"
@@ -44,4 +43,4 @@ jobs:
           ./vcpkg install hermes
         continue-on-error: true
       - name: output
-        run: cat  /Users/runner/work/vcpkg/vcpkg/buildtrees/hermes-shm/config-arm64-osx-out.log
+        run: cat  /Users/runner/work/vcpkg/vcpkg/buildtrees/hermes-shm/install-arm64-osx-dbg-out.log
