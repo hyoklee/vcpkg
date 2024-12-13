@@ -17,12 +17,9 @@ jobs:
       - name: test
         run: |
           ls /opt/homebrew/opt/libomp/lib
-          which g++
-          export CXX1X="g++ -fopenmp"
-          export CXX98="g++ -fopenmp"
-          export CXX11="g++ -fopenmp"
-          export CXX14="g++ -fopenmp"
-          export CXX17"=g++ -fopenmp"
+          export CC=/usr/local/opt/llvm/bin/clang
+          export CXX=/usr/local/opt/llvm/bin/clang++
+          which clang
           export OpenMP_ROOT=$(brew --prefix)/opt/libomp
           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
           export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/libomp/lib"
