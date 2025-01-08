@@ -3,7 +3,7 @@ name: lin
 on:
   push:
     branches:
-      - master-
+      - master
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -18,4 +18,4 @@ jobs:
         shell: bash
         run: |
           ./bootstrap-vcpkg.sh
-          ./vcpkg install hermes
+          ./vcpkg install hermes[hdf5]
