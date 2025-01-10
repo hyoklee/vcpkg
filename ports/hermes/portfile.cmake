@@ -11,7 +11,14 @@ vcpkg_from_github(
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
+        adios HERMES_ENABLE_ADIOS
         hdf5 HERMES_ENABLE_VFD
+        kvstore HERMES_ENABLE_KVSTORE
+        mpiio HERMES_ENABLE_MPIIO_ADAPTER
+        posix HERMES_ENABLE_POSIX_ADAPTER
+        pubsub HERMES_ENABLE_PUBSUB_ADAPTER
+        python HERMES_ENABLE_PYTHON
+        stdio HERMES_ENABLE_STDIO_ADAPTER
 )
 
 vcpkg_cmake_configure(
