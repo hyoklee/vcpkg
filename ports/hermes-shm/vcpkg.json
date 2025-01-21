@@ -11,5 +11,12 @@
     },
       "catch2",
       "cereal"
-  ]
+  ],
+  "default-features": [],
+    "features": {
+	"thallium": {
+	    "description": "Test with Thallium",
+	    "dependencies": ["thallium"]
+	}
+  }
 }

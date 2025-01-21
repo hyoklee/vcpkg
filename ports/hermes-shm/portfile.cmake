@@ -22,11 +22,17 @@ else()
 endif()
 
 
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        thallium HERMES_RPC_THALLIUM
+)
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
         -DHERMES_ENABLE_DOXYGEN=OFF
+        -DHERMES_RPC_THALLIUM=OFF	
+        ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()
