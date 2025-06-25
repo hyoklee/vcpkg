@@ -7,16 +7,17 @@ vcpkg_from_github(
     #[[
         Attention: pdal-dimbuilder must be updated together with pdal
     #]]
-    SHA512 7296fc73521bb3c01ea515a565f2b54402e08c147dd2d51ea09d611c59e502700b561f7495cb8cb36bf0b59b88dc3ed08ed068991bd739c16265a36e8c95b613
+    SHA512 85aaab726d172ef46b8cf05bd72772da72cf5615db549cd262acc4d468f631f1093577b9866ca598b7bef72507f7774e599e66a6cbbf589bd1b5b85bb8107642
     HEAD_REF master
     PATCHES
         dependencies.diff
         external-dimbuilder.diff
         find-library-suffix.diff
         no-rpath.patch
+        spz-zlib.diff  # https://github.com/PDAL/PDAL/issues/4745
 )
 file(REMOVE_RECURSE
-    "${SOURCE_PATH}/cmake/modules/FindCURL.cmake"
+    "${SOURCE_PATH}/cmake/modules/FindCurl.cmake"
     "${SOURCE_PATH}/cmake/modules/FindGeoTIFF.cmake"
     "${SOURCE_PATH}/cmake/modules/FindICONV.cmake"
     "${SOURCE_PATH}/cmake/modules/FindZSTD.cmake"
@@ -27,6 +28,8 @@ file(REMOVE_RECURSE
     "${SOURCE_PATH}/vendor/schema-validator"
     "${SOURCE_PATH}/vendor/utfcpp"
 )
+# PDAL includes "h3api.h", and some calls are decorated with PDALH3
+file(COPY "${CURRENT_PORT_DIR}/h3api.h" DESTINATION "${SOURCE_PATH}")
 # PDAL uses namespace 'NL' for nlohmann
 file(COPY "${CURRENT_INSTALLED_DIR}/include/nlohmann" DESTINATION "${SOURCE_PATH}/vendor/nlohmann/")
 file(APPEND "${SOURCE_PATH}/vendor/nlohmann/nlohmann/json.hpp" "\nnamespace NL = nlohmann;\n")
@@ -104,10 +107,14 @@ file(READ "${SOURCE_PATH}/vendor/lepcc/src/LEPCC.h" license)
 string(REGEX REPLACE "^/\\*\n|\\*/.*\$" "" license "${license}")
 file(WRITE "${lepcc_license}" "${license}")
 
+set(spz_license "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/spz LICENSE")
+file(COPY_FILE "${SOURCE_PATH}/vendor/spz/LICENSE" "${spz_license}")
+
 vcpkg_install_copyright(FILE_LIST
     "${SOURCE_PATH}/LICENSE.txt"
     "${arbiter_license}"
     "${kazhdan_license}"
     "${lazperf_license}"
     "${lepcc_license}"
+    "${spz_license}"
 )
