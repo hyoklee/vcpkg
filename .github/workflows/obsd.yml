@@ -35,7 +35,7 @@ jobs:
           version: '${{ matrix.os.version }}'
           shell: bash
           run: |
-            sudo pkg_add cmake ninja
+            sudo pkg_add cmake ninja git
             which clang
             which clang++
             export CC=clang
