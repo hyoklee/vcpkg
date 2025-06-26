@@ -1,0 +1,45 @@
+name: r
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: ${{ matrix.os.name }} ${{ matrix.os.architecture }} ${{ matrix.os.version }} on ${{ matrix.os.host }}
+    runs-on: ${{ matrix.os.host }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - name: freebsd
+            architecture: x86_64
+            version: '14.3'
+            host: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: hyoklee/vcpkg
+
+      - name: ${{ matrix.os.name }}
+        uses: cross-platform-actions/action@master
+        env:
+          FOO: A
+          BAR: B
+        with:
+          environment_variables: FOO BAR
+          operating_system: ${{ matrix.os.name }}
+          architecture: ${{ matrix.os.architecture }}
+          version: '${{ matrix.os.version }}'
+          shell: bash
+          run: |
+            sudo pkg_add cmake ninja git zip gmake
+            which clang
+            which clang++
+            export CC=clang
+            export CXX=clang++
+            ./bootstrap-vcpkg.sh
+            VCPKG_FORCE_SYSTEM_BINARIES=1 ./vcpkg install content-assimilation-engine
+
