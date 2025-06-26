@@ -35,6 +35,10 @@ jobs:
           version: '${{ matrix.os.version }}'
           shell: bash
           run: |
-            sudo pkg_add cmake
+            sudo pkg_add cmake ninja
+            which clang
+            which clnag++
+            export CC=clnag
+            export CXX=clang+
             ./bootstrap-vcpkg.sh
 
