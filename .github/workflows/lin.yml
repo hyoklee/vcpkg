@@ -18,4 +18,4 @@ jobs:
         shell: bash
         run: |
           ./bootstrap-vcpkg.sh
-          ./vcpkg install hermes[hdf5,mpiio]
+          ./vcpkg install content-transfer-engine
