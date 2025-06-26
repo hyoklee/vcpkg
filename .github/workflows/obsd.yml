@@ -41,5 +41,5 @@ jobs:
             export CC=clang
             export CXX=clang++
             ./bootstrap-vcpkg.sh
-            VCPKG_FORCE_SYSTEM_BINARIES=1 ./vcpkg install content-assimilation-engine
+            VCPKG_FORCE_SYSTEM_BINARIES=1 ./vcpkg install poco
 
