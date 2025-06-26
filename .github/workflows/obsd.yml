@@ -35,6 +35,6 @@ jobs:
           version: '${{ matrix.os.version }}'
           shell: bash
           run: |
-            ls
+            sudo pkg_add cmake
             ./bootstrap-vcpkg.sh
 
