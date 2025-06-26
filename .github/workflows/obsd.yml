@@ -38,7 +38,7 @@ jobs:
             sudo pkg_add cmake ninja
             which clang
             which clang++
-            export CC=clnag
+            export CC=clang
             export CXX=clang++
             ./bootstrap-vcpkg.sh
 
