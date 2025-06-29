@@ -12,7 +12,8 @@
 	"boost-fiber",
 	"boost-filesystem",
 	"boost-regex",
-	"boost-system",	
+	"boost-stacktrace",
+	"boost-system",
 	"cte-hermes-shm",
 	"pybind11",
 	"snappy"
