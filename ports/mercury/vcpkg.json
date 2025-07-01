@@ -14,8 +14,7 @@
   "default-features": ["boost"],
   "features": {
     "boost": {
-	"description": "Use BOOST preprocessor macros.",
-        "dependencies": ["boost"]
+	"description": "Use BOOST preprocessor macros."
     }
   }
 }
