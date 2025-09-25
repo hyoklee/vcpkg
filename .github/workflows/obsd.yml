@@ -35,7 +35,7 @@ jobs:
           version: '${{ matrix.os.version }}'
           shell: bash
           run: |
-            sudo pkg_add cmake ninja git zip gmake poco
+            sudo pkg_add cmake git gmake ninja  poco zip unzip
             which clang
             which clang++
             export CC=clang
