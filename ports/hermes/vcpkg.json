@@ -20,10 +20,6 @@
     "hdf5": {
       "description": "Build the Hermes HDF5 Virtual File Driver",
       "dependencies": ["hdf5"]
-    },
-    "mpiio": {
-      "description": "Build the Hermes MPI-IO adapter.",
-      "dependencies": ["mpi"]
-    }      
+    }
   }
 }

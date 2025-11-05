@@ -9,12 +9,14 @@
 	    "name": "vcpkg-cmake",
 	    "host": true
 	},
-	"boost",
+	"boost-fiber",
+	"boost-filesystem",
+	"boost-regex",
+	"boost-system",	
 	"cte-hermes-shm",
-	"pybind11",
 	"snappy"
     ],
-    "default-features": ["mpi", "openmp", "python", "shared", "test"],
+    "default-features": ["mpi", "openmp", "shared", "test"],
     "features": {
 	"coverage": {
 	    "description": "Check how well tests cover code"
@@ -45,7 +47,8 @@
 	    "description": "Build OpenMP tests"
 	},
 	"python": {
-	    "description": "Use pybind11"
+	    "description": "Use pybind11",
+	    "dependencies": ["pybind11"]
 	},
 	"remote": {
 	    "description": "Debug remote tasks"

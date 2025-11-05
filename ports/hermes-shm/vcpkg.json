@@ -1,7 +1,7 @@
 {
     "name": "hermes-shm",
     "version": "1.1.0",
-    "homepage": "https://grc.iit.edu/hermes-shm/",
+    "homepage": "https://grc.iit.edu/cte-hermes-shm/",
     "description": "This library contains a variety of data structures and synchronization primitives which are compatible with shared memory.",
     "license": "BSD-3-Clause",
     "dependencies": [
@@ -11,18 +11,18 @@
 	},
 	"catch2"
     ],
-    "default-features": ["bench","boost","cereal","coverage","doxygen","elf","mpi","openmp","pthread","shared","test","thallium"],
+    "default-features": ["bench","boost","cereal","doxygen","elf","mpi","openmp","pthread","shared","test","thallium"],
     "features": {
         "bench": {
 	    "description": "Build benchmarks"
 	},
 	"boost": {
 	    "description": "Build Boost tests",
-	    "dependencies": ["boost"]	    
+	    "dependencies": ["boost"]
 	},
 	"cereal": {
 	    "description": "Enable serialization using cereal",
-	    "dependencies": ["cereal"]	    
+	    "dependencies": ["cereal"]
 	},
 	"coverage": {
 	    "description": "Check how well tests cover code"
@@ -32,7 +32,7 @@
 	},
 	"elf": {
 	    "description": "Enable ELF"
-	},	
+	},
 	"mpi": {
 	    "description": "Build MPI tests",
 	    "dependencies": ["mpi"]
@@ -42,13 +42,13 @@
 	},
 	"pthread": {
 	    "description": "Support spawning pthreads"
-	},	
+	},
 	"shared": {
 	    "description": "Build shared libraries"
 	},
 	"test": {
 	    "description": "Build tests"
-	},	
+	},
 	"thallium": {
 	    "description": "Test with Thallium",
 	    "dependencies": ["thallium"]
