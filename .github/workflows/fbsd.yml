@@ -15,21 +15,17 @@ jobs:
         os:
           - name: freebsd
             architecture: x86_64
-            version: '14.3'
+            version: '15.0'
             host: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hyoklee/vcpkg
 
       - name: ${{ matrix.os.name }}
         uses: cross-platform-actions/action@master
-        env:
-          FOO: A
-          BAR: B
         with:
-          environment_variables: FOO BAR
           operating_system: ${{ matrix.os.name }}
           architecture: ${{ matrix.os.architecture }}
           version: '${{ matrix.os.version }}'
@@ -41,5 +37,5 @@ jobs:
             export CC=clang
             export CXX=clang++
             ./bootstrap-vcpkg.sh
-            VCPKG_FORCE_SYSTEM_BINARIES=1 ./vcpkg install content-assimilation-engine[core,poco]
+            VCPKG_FORCE_SYSTEM_BINARIES=1 ./vcpkg install wrp
 
