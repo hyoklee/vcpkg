@@ -1,10 +1,22 @@
 cmake_minimum_required (VERSION 3.8)
-project (xmlsec1 C CXX) # CXX needed when libxml2 is built with icu
+
+message(STATUS "Reading version info from configure.ac")
+file(STRINGS "configure.ac" _xmlsec_ac_init REGEX "^AC_INIT\\(")
+if(_xmlsec_ac_init MATCHES "AC_INIT\\(\\[[^]]+\\],\\[([0-9]+\\.[0-9]+\\.[0-9]+)\\]")
+    set(XMLSEC_VERSION "${CMAKE_MATCH_1}")
+else()
+    message(FATAL_ERROR "Could not parse version from configure.ac")
+endif()
+
+project(xmlsec1 VERSION ${XMLSEC_VERSION} LANGUAGES C CXX) # CXX needed when libxml2 is built with icu
+
 
 include(CMakeDependentOption)
+include(GNUInstallDirs)
 
+option(INSTALL_HEADERS "Install headers" ON)
 cmake_dependent_option(BUILD_WITH_DYNAMIC_LOADING "Enable dynamic loading of xmlsec-crypto libraries" OFF BUILD_SHARED_LIBS OFF)
-option(INSTALL_HEADERS_TOOLS "Install public header files and tools" ON)
+option(BUILD_WITH_TOOLS "Build tools" ON)
 
 find_package(LibXml2 REQUIRED)
 find_package(OpenSSL REQUIRED)
@@ -18,30 +30,11 @@ FILE(GLOB SOURCESXMLSECOPENSSL
     src/strings.c
 )
 
-# Generate xmlexports with fixed definition of XMLSEC_STATIC
-file(READ include/xmlsec/exports.h EXPORTS_H)
-if(BUILD_SHARED_LIBS)
-    string(REPLACE "!defined(XMLSEC_STATIC)" "1" EXPORTS_H "${EXPORTS_H}")
-else()
-    string(REPLACE "!defined(XMLSEC_STATIC)" "0" EXPORTS_H "${EXPORTS_H}")
-endif()
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/exports.h "${EXPORTS_H}")
-
-message(STATUS "Reading version info from configure.ac")
-
-file(STRINGS "configure.ac"
-    _xmlsec_version_defines REGEX "XMLSEC_VERSION_(MAJOR|MINOR|SUBMINOR)=([0-9]+)$")
-
-foreach(ver ${_xmlsec_version_defines})
-    if(ver MATCHES "XMLSEC_VERSION_(MAJOR|MINOR|SUBMINOR)=([0-9]+)$")
-        set(XMLSEC_VERSION_${CMAKE_MATCH_1} "${CMAKE_MATCH_2}" CACHE INTERNAL "")
-    endif()
-endforeach()
-
-set(XMLSEC_VERSION ${XMLSEC_VERSION_MAJOR}.${XMLSEC_VERSION_MINOR}.${XMLSEC_VERSION_SUBMINOR})
-math(EXPR XMLSEC_VERSION_INFO_NUMBER "${XMLSEC_VERSION_MAJOR} + ${XMLSEC_VERSION_MINOR}")
-set(XMLSEC_VERSION_INFO ${XMLSEC_VERSION_INFO_NUMBER}:${XMLSEC_VERSION_SUBMINOR}:${XMLSEC_VERSION_MINOR})
-
+set(XMLSEC_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(XMLSEC_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(XMLSEC_VERSION_SUBMINOR "${PROJECT_VERSION_PATCH}")
+math(EXPR _xmlsec_version_current "10000 * ${PROJECT_VERSION_MAJOR} + 100 * ${PROJECT_VERSION_MINOR} + ${PROJECT_VERSION_PATCH}")
+set(XMLSEC_VERSION_INFO "${_xmlsec_version_current}:0:0")
 message(STATUS "XMLSEC_VERSION: ${XMLSEC_VERSION}")
 message(STATUS "XMLSEC_VERSION_MAJOR: ${XMLSEC_VERSION_MAJOR}")
 message(STATUS "XMLSEC_VERSION_MINOR: ${XMLSEC_VERSION_MINOR}")
@@ -49,8 +42,47 @@ message(STATUS "XMLSEC_VERSION_SUBMINOR: ${XMLSEC_VERSION_SUBMINOR}")
 message(STATUS "XMLSEC_VERSION_INFO: ${XMLSEC_VERSION_INFO}")
 
 message(STATUS "Generating version.h")
-
 configure_file(include/xmlsec/version.h.in include/xmlsec/version.h)
+# Generate xmlexports with fixed definition of XMLSEC_STATIC
+file(READ include/xmlsec/exports.h EXPORTS_H)
+if(BUILD_SHARED_LIBS)
+    string(REPLACE "!defined(XMLSEC_STATIC)" "1" EXPORTS_H "${EXPORTS_H}")
+else()
+    string(REPLACE "!defined(XMLSEC_STATIC)" "0" EXPORTS_H "${EXPORTS_H}")
+endif()
+set(EXPORTS_H "${EXPORTS_H}
+#ifndef XMLSEC_NO_XSLT
+#define XMLSEC_NO_XSLT 1
+#endif
+#ifndef XMLSEC_CRYPTO_OPENSSL
+#define XMLSEC_CRYPTO_OPENSSL 1
+#endif
+#ifndef XMLSEC_NO_FTP
+#define XMLSEC_NO_FTP 1
+#endif
+#ifndef XMLSEC_NO_HTTP
+#define XMLSEC_NO_HTTP 1
+#endif
+#ifndef XMLSEC_NO_MD5
+#define XMLSEC_NO_MD5 1
+#endif
+#ifndef XMLSEC_NO_RIPEMD160
+#define XMLSEC_NO_RIPEMD160 1
+#endif
+#ifndef XMLSEC_NO_GOST
+#define XMLSEC_NO_GOST 1
+#endif
+#ifndef XMLSEC_NO_GOST2012
+#define XMLSEC_NO_GOST2012 1
+#endif
+#ifndef XMLSEC_NO_MLDSA
+#define XMLSEC_NO_MLDSA 1
+#endif
+#ifndef XMLSEC_NO_SLHDSA
+#define XMLSEC_NO_SLHDSA 1
+#endif
+")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/include/xmlsec/exports.h "${EXPORTS_H}")
 
 if(MSVC)
     add_compile_options(/wd4130 /wd4127 /wd4152)
@@ -71,20 +103,13 @@ target_link_libraries(xmlsec1 PUBLIC LibXml2::LibXml2)
 target_link_libraries(xmlsec1-openssl PUBLIC xmlsec1 OpenSSL::Crypto)
 
 add_compile_definitions(
-	inline=__inline
-	PACKAGE="xmlsec1"
-	HAVE_STDIO_H
-	HAVE_STDLIB_H
-	HAVE_STRING_H
-	HAVE_CTYPE_H
-	HAVE_MALLOC_H
-	HAVE_MEMORY_H
-	XMLSEC_DEFAULT_CRYPTO="openssl"
-	UNICODE
-	_UNICODE
-	_MBCS
-	_REENTRANT
-	WIN32_LEAN_AND_MEAN
+    PACKAGE="xmlsec1"
+    XMLSEC_DEFAULT_CRYPTO="openssl"
+    UNICODE
+    _UNICODE
+    _MBCS
+    _REENTRANT
+    WIN32_LEAN_AND_MEAN
 )
 
 set_target_properties(xmlsec1 xmlsec1-openssl PROPERTIES VERSION ${XMLSEC_VERSION_MAJOR}.${XMLSEC_VERSION_MINOR})
@@ -93,7 +118,7 @@ set(XMLSEC_CORE_CFLAGS XMLSEC_NO_XSLT XMLSEC_CRYPTO_OPENSSL XMLSEC_NO_FTP XMLSEC
 if(NOT BUILD_SHARED_LIBS)
     list(APPEND XMLSEC_CORE_CFLAGS XMLSEC_STATIC)
 endif()
-set(XMLSEC_OPENSSL_CFLAGS XMLSEC_NO_MD5 XMLSEC_NO_RIPEMD160 XMLSEC_NO_GOST XMLSEC_NO_GOST2012)
+set(XMLSEC_OPENSSL_CFLAGS XMLSEC_NO_MD5 XMLSEC_NO_RIPEMD160 XMLSEC_NO_GOST XMLSEC_NO_GOST2012 XMLSEC_NO_MLDSA XMLSEC_NO_SLHDSA)
 
 if(BUILD_WITH_DYNAMIC_LOADING)
     if(NOT WIN32)
@@ -130,32 +155,23 @@ install(EXPORT unofficial-xmlsec-targets
     DESTINATION share/unofficial-xmlsec
 )
 
-if(INSTALL_HEADERS_TOOLS)
-	file(GLOB PUBLIC_HEADERS
-		include/xmlsec/*.h
-		include/xmlsec/openssl/*.h)
-	list(FILTER PUBLIC_HEADERS EXCLUDE REGEX "exports\\.h$")
+if(INSTALL_HEADERS)
+    install(DIRECTORY include/xmlsec DESTINATION include FILES_MATCHING PATTERN "*.h")
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/xmlsec DESTINATION include)
+endif()
 
-	foreach(file IN LISTS PUBLIC_HEADERS)
-		get_filename_component(dir ${file} DIRECTORY)
-		file(RELATIVE_PATH rel_dir ${CMAKE_SOURCE_DIR}/xmlsec/${LIB} ${dir})
-		install(FILES ${file} DESTINATION "include/${rel_dir}")
-	endforeach()
+if(BUILD_WITH_TOOLS)
+    # xmlsec application
+    add_executable(xmlsec
+        apps/crypto.c
+        apps/cmdline.c
+        apps/xmlsec.c)
 
-	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/xmlsec/version.h DESTINATION "include/xmlsec")
-	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/exports.h DESTINATION "include/xmlsec")
+    if(WIN32)
+        target_link_libraries(xmlsec PRIVATE crypt32.lib)
+    endif()
 
-	# xmlsec application
-	add_executable(xmlsec
-		apps/crypto.c
-		apps/cmdline.c
-		apps/xmlsec.c)
-
-	if(CMAKE_SYSTEM_NAME STREQUAL "Windows" OR CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
-		target_link_libraries(xmlsec PRIVATE crypt32.lib)
-	endif()
-
-	target_link_libraries(xmlsec PRIVATE xmlsec1-openssl)
+    target_link_libraries(xmlsec PRIVATE xmlsec1-openssl)
 
     if(NOT BUILD_SHARED_LIBS)
         # needed when libxml2 is built with icu

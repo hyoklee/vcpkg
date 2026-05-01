@@ -4,7 +4,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO BasedInc/libhat
     REF "v${VERSION}"
-    SHA512 e2f3b06ea79436704b6f419370ca99e200d50c157f36492945006ce1b0bf5f7f924b601296babb3c2a6c0d50487c10551f7dfb5eeda51bd6c87044079be47db3
+    SHA512 68ce4d66f92553eb0f3e0f26c0274bc048d735936a68abf2fcb2ce7766dcdab73fb5dc0d8bbf249e5b36bd7a2eb2db06878eaffcd16d4bcac839953506704c8d
     HEAD_REF master
     PATCHES
         0001-CMakeLists.patch
@@ -19,15 +19,13 @@ string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static"    LIBHAT_BUILD_STATIC)
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
         "hint"  LIBHAT_HINT_X86_64
-    INVERTED_FEATURES
-        "sse"    LIBHAT_DISABLE_SSE
-        "avx"    LIBHAT_DISABLE_AVX512
 )
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
         ${FEATURE_OPTIONS}
+        -DLIBHAT_DISABLE_AVX512=ON # For AVX512, author an overlay-port that removes this line
         -DLIBHAT_SHARED_C_LIB=${LIBHAT_BUILD_SHARED}
         -DLIBHAT_STATIC_C_LIB=${LIBHAT_BUILD_STATIC}
         -DLIBHAT_TESTING=OFF

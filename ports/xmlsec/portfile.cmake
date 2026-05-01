@@ -3,20 +3,24 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO lsh123/xmlsec
     REF "${release_tag}"
-    SHA512 40a6d73c308408f5bea71b779ad070b74609f7bff2cd28f6c4191e8a67981d81041b9c7acbdba36192ce7bcaac21e55c5ad58096d20d613c1a010d45491c7ba4
+    SHA512 23baf617f1bbfe2228ca00df9542a6cc5b4cf9896c448e3154a6e2ef878e6c081e7ee4b74b2101690fd44edbd6e55d3466b86986ca14f11fe556e113434aa33e
     HEAD_REF master
-    PATCHES 
+    PATCHES
         pkgconfig_fixes.patch
 )
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt" DESTINATION "${SOURCE_PATH}")
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-    FEATURES "with-dl" BUILD_WITH_DYNAMIC_LOADING
+    FEATURES
+        "tools"     BUILD_WITH_TOOLS
+        "with-dl"   BUILD_WITH_DYNAMIC_LOADING
 )
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS ${FEATURE_OPTIONS}
-    OPTIONS_DEBUG -DINSTALL_HEADERS_TOOLS=OFF
+    OPTIONS_DEBUG
+        -DINSTALL_HEADERS=OFF
+        -DBUILD_WITH_TOOLS=OFF
 )
 
 vcpkg_cmake_install()
