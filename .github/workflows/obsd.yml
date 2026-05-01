@@ -30,6 +30,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg_add cmake curl git gmake ninja patchelf poco unzip-6.0p18 zip
+            sudo ln -s /usr/local/lib/libcurl.so.26.34 /usr/local/lib/libcurl.so.4
             export PATH="/usr/local/bin:$PATH"
             which clang
             which clang++
@@ -38,4 +39,3 @@ jobs:
             export CXX=clang++
             ./bootstrap-vcpkg.sh
             VCPKG_FORCE_SYSTEM_BINARIES=1 ./vcpkg install wrp[core]
-
