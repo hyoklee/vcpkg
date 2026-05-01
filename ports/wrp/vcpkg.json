@@ -1,8 +1,8 @@
 {
-  "name": "content-assimilation-engine",
+  "name": "wrp",
   "version": "0.0.0",
-  "homepage": "https://github.com/iowarp/content-assimilation-engine",
-  "description": "Content Assimilation Engine forms data lake for IOWarp",
+  "homepage": "https://github.com/hyoklee/wrp",
+  "description": "Data Black Hole for AI",
   "license": "BSD-3-Clause",
   "dependencies": [
     {
