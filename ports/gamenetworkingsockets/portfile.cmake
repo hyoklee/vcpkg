@@ -1,27 +1,50 @@
-vcpkg_check_linkage(ONLY_DYNAMIC_LIBRARY)
-
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ValveSoftware/GameNetworkingSockets
-    REF 4fbfe83ef4d59a12dc32baeff2c33e511af93157 # v1.5.0
-    SHA512 221ca364d7bd2dfb4e9764ca272998e06a15f9978977bc3eec34dd469fe290ebb983f2895f1d33e10ea01b23ce83d213489365d2203155f2476eefe25f33df85
+    REF "2cb93a06350bb065db53abdb0d87cf297e0bfd34" # v1.6.0
+    SHA512 c2deaa3aab42cd840dd13560ca4da40faa375ab846ea15af38d55eb7acc48cfe8cbdbe0c76b9c3484d26f9e1163e36ac1eb73a317e5c19cefe60d0b861d19e06
     HEAD_REF master
 )
 
-set(CRYPTO_BACKEND OpenSSL)
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        ice             ENABLE_ICE
+)
+
+# Select static vs dynamic based on the triplet.
+if("${VCPKG_LIBRARY_LINKAGE}" STREQUAL "dynamic")
+    set(BUILD_SHARED_LIB ON)
+    set(BUILD_STATIC_LIB OFF)
+else()
+    set(BUILD_SHARED_LIB OFF)
+    set(BUILD_STATIC_LIB ON)
+endif()
+
+# Link the MSVC CRT statically when the CRT linkage is static.
+# Not used on non-MSVC platforms; listed in MAYBE_UNUSED_VARIABLES accordingly.
+if("${VCPKG_CRT_LINKAGE}" STREQUAL "static")
+    set(MSVC_CRT_STATIC ON)
+else()
+    set(MSVC_CRT_STATIC OFF)
+endif()
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
+        -DUSE_CRYPTO=OpenSSL
+        -DBUILD_STATIC_LIB=${BUILD_STATIC_LIB}
+        -DBUILD_SHARED_LIB=${BUILD_SHARED_LIB}
+        -DMSVC_CRT_STATIC=${MSVC_CRT_STATIC}
         -DBUILD_TESTS=OFF
         -DBUILD_EXAMPLES=OFF
         -DBUILD_TOOLS=OFF
-        -DUSE_CRYPTO=${CRYPTO_BACKEND}
-        -DUSE_CRYPTO25519=${CRYPTO_BACKEND}
+        ${FEATURE_OPTIONS}
+    MAYBE_UNUSED_VARIABLES
+        MSVC_CRT_STATIC
 )
 
 vcpkg_cmake_install()
-
 vcpkg_cmake_config_fixup(CONFIG_PATH "lib/cmake/GameNetworkingSockets")
 vcpkg_fixup_pkgconfig()
 

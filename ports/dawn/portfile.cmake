@@ -2,7 +2,7 @@ if (VCPKG_TARGET_IS_EMSCRIPTEN)
     vcpkg_download_distfile(ARCHIVE
         URLS "https://github.com/google/dawn/releases/download/v${VERSION}/emdawnwebgpu_pkg-v${VERSION}.zip"
         FILENAME "emdawnwebgpu_pkg-v${VERSION}.zip"
-        SHA512 5fd1c1d29c6657ae9e33a0fe27e27e7fd0147591e43e506d00bcc5d75c70327b3e020c777c71b3421e0c7afc245b2807b247cbf59ea581083c47ac2b60b80d3e
+        SHA512 f3649765536fa308cac31e36aaf819c1ce9a9f9f16e055f4419b8ac8617516b44bdd701461d25018a87cc1b7e7b8be860db338fdb7da9cd859d0019070667cdd
     )
     vcpkg_extract_source_archive(
         SOURCE_PATH
@@ -36,12 +36,12 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO google/dawn
     REF "v${VERSION}"
-    SHA512 59c398e3a218d3776dc258582d90f7ba0e95181fe049c2afdfc734d6c9edf3ba489b283db93a79e04fa3cf0a934a2c9cfbf3cb330b16fee08b343bc45d0a568d
+    SHA512 47fa49d9fe5d3adec694a07709c6f1a515a4f1f850b5ca602205aa2080695e0228752879182ddaad2bd8f9bc40fe87aa39755e9e4e034dc5b45289bb5a57b7e5
     HEAD_REF master
     PATCHES
         001-fix-windows-build.patch
         002-fix-uwp.patch
-        003-fix-d3d11.patch
+        003-force-disable-cxx-module.patch
         004-deps.patch
         005-bsd-support.patch
         # https://github.com/google/dawn/commit/fa4a364b9ff215f9fe95823ec89ccc922cf7b254 added a tint writer for the null backend.
@@ -52,8 +52,6 @@ vcpkg_from_github(
         009-fix-tint-install.patch
         010-fix-glslang.patch
         011-fix-dxc.patch
-        # https://github.com/google/dawn/commit/d0a283a7a5e6320ca919f9580590371086f41dd6
-        012-fix-non-target-leaking.patch
 )
 
 function(checkout_in_path PATH URL REF)
@@ -92,22 +90,22 @@ checkout_in_path(
 checkout_in_path(
     "${SOURCE_PATH}/third_party/spirv-headers/src"
     "https://github.com/KhronosGroup/SPIRV-Headers"
-    "ce9dfb01496073a02d74581ae909384763b41ff8"
+    "c63848ecf2200425511319fd8bf2c17b751e501e"
 )
 
 checkout_in_path(
     "${SOURCE_PATH}/third_party/spirv-tools/src"
     "https://github.com/KhronosGroup/SPIRV-Tools"
-    "34bc8ea6f3f84d5ed7739daa66b01e7273aed458"
+    "58fe144fdc8847b303be51d4f8fcc9e7da17056e"
     PATCHES
         # Dawn sets SPIRV_WERROR to OFF when building SPIRV-Tools, but https://github.com/KhronosGroup/SPIRV-Tools/commit/337fdb6a284fe7f7e374a14271f8e20e579f3263 ignores that CMake variable and forces /WX
-        006-msvc-spirv-tools-disable-warnaserror.patch
+        800-msvc-spirv-tools-disable-warnaserror.patch
 )
 
 checkout_in_path(
     "${SOURCE_PATH}/third_party/webgpu-headers/src"
     "https://github.com/webgpu-native/webgpu-headers"
-    "7d3186c3dd2c708703524027b46b8703534ab3cc"
+    "bf8ddb91dc38ea11ec1b727dae1fa965c4207d22"
 )
 
 vcpkg_find_acquire_program(PYTHON3)

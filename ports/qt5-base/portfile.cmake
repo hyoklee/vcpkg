@@ -14,11 +14,6 @@ endif()
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
-set(WITH_PGSQL_PLUGIN OFF)
-if("postgresqlplugin" IN_LIST FEATURES)
-    set(WITH_PGSQL_PLUGIN ON)
-endif()
-
 set(WITH_MYSQL_PLUGIN OFF)
 if ("mysqlplugin" IN_LIST FEATURES)
     set(WITH_MYSQL_PLUGIN  ON)
@@ -50,11 +45,6 @@ endif()
 ## Downloading Qt5-Base
 
 set(PATCHES
-    # CVE fixes from https://download.qt.io/archive/qt/5.15/
-    patches/CVE-2025-4211-qtbase-5.15.diff
-    patches/CVE-2025-5455-qtbase-5.15.patch
-    patches/CVE-2025-30348-qtbase-5.15.diff
-
     patches/winmain_pro.patch          #Moves qtmain to manual-link
     patches/windows_prf.patch          #fixes the qtmain dependency due to the above move
     patches/qt_app.patch               #Moves the target location of qt5 host apps to always install into the host dir.
@@ -134,11 +124,6 @@ else()
     list(APPEND CORE_OPTIONS -dbus-runtime)
 endif()
 
-if(WITH_PGSQL_PLUGIN)
-    list(APPEND CORE_OPTIONS -sql-psql)
-else()
-    list(APPEND CORE_OPTIONS -no-sql-psql)
-endif()
 if(WITH_MYSQL_PLUGIN)
     list(APPEND CORE_OPTIONS -sql-mysql)
 else()
@@ -241,6 +226,15 @@ if(NOT VCPKG_TARGET_IS_WINDOWS)
     list(APPEND DEBUG_OPTIONS "FONTCONFIG_LIBS=${fontconfig_LIBS_DEBUG}")
 endif()
 
+if("postgresqlplugin" IN_LIST FEATURES)
+    list(APPEND CORE_OPTIONS -sql-psql)
+    x_vcpkg_pkgconfig_get_modules(PREFIX libpq MODULES libpq LIBS)
+    list(APPEND RELEASE_OPTIONS "PSQL_LIBS=${libpq_LIBS_RELEASE}")
+    list(APPEND DEBUG_OPTIONS "PSQL_LIBS=${libpq_LIBS_DEBUG}")
+else()
+    list(APPEND CORE_OPTIONS -no-sql-psql)
+endif()
+
 if("sqlite3plugin" IN_LIST FEATURES)
     list(APPEND CORE_OPTIONS -system-sqlite)
     x_vcpkg_pkgconfig_get_modules(PREFIX sqlite3 MODULES sqlite3 LIBS)
@@ -296,22 +290,12 @@ if(VCPKG_TARGET_IS_WINDOWS)
     else()
         list(APPEND CORE_OPTIONS -schannel)
     endif()
-
-    if(WITH_PGSQL_PLUGIN)
-        list(APPEND RELEASE_OPTIONS "PSQL_LIBS=${PSQL_RELEASE} ${PSQL_PORT_RELEASE} ${PSQL_COMMON_RELEASE} ${SSL_RELEASE} ${EAY_RELEASE} ${ADDITIONAL_WINDOWS_LIBS} -lwldap32")
-        list(APPEND DEBUG_OPTIONS "PSQL_LIBS=${PSQL_DEBUG} ${PSQL_PORT_DEBUG} ${PSQL_COMMON_DEBUG} ${SSL_DEBUG} ${EAY_DEBUG} ${ADDITIONAL_WINDOWS_LIBS} -lwldap32")
-    endif()
 elseif(VCPKG_TARGET_IS_LINUX)
     list(APPEND CORE_OPTIONS -xcb-xlib -xcb -linuxfb)
 
     if(WITH_OPENSSL)
         list(APPEND RELEASE_OPTIONS "OPENSSL_LIBS=${SSL_RELEASE} ${EAY_RELEASE} -ldl -lpthread")
         list(APPEND DEBUG_OPTIONS "OPENSSL_LIBS=${SSL_DEBUG} ${EAY_DEBUG} -ldl -lpthread")
-    endif()
-
-    if(WITH_PGSQL_PLUGIN)
-        list(APPEND RELEASE_OPTIONS "PSQL_LIBS=${PSQL_RELEASE} ${PSQL_PORT_RELEASE} ${PSQL_TYPES_RELEASE} ${PSQL_COMMON_RELEASE} ${SSL_RELEASE} ${EAY_RELEASE} -ldl -lpthread")
-        list(APPEND DEBUG_OPTIONS "PSQL_LIBS=${PSQL_DEBUG} ${PSQL_PORT_DEBUG} ${PSQL_TYPES_DEBUG} ${PSQL_COMMON_DEBUG} ${SSL_DEBUG} ${EAY_DEBUG} -ldl -lpthread")
     endif()
 elseif(VCPKG_TARGET_IS_OSX)
     if (VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
@@ -376,11 +360,6 @@ elseif(VCPKG_TARGET_IS_OSX)
     if(WITH_OPENSSL)
         list(APPEND RELEASE_OPTIONS "OPENSSL_LIBS=${SSL_RELEASE} ${EAY_RELEASE} -ldl -lpthread")
         list(APPEND DEBUG_OPTIONS "OPENSSL_LIBS=${SSL_DEBUG} ${EAY_DEBUG} -ldl -lpthread")
-    endif()
-
-    if(WITH_PGSQL_PLUGIN)
-        list(APPEND RELEASE_OPTIONS "PSQL_LIBS=${PSQL_RELEASE} ${PSQL_PORT_RELEASE} ${PSQL_TYPES_RELEASE} ${PSQL_COMMON_RELEASE} ${SSL_RELEASE} ${EAY_RELEASE} -ldl -lpthread")
-        list(APPEND DEBUG_OPTIONS "PSQL_LIBS=${PSQL_DEBUG} ${PSQL_PORT_DEBUG} ${PSQL_TYPES_DEBUG} ${PSQL_COMMON_DEBUG} ${SSL_DEBUG} ${EAY_DEBUG} -ldl -lpthread")
     endif()
 endif()
 
