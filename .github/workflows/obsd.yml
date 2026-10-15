@@ -21,14 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: ${{ matrix.os.name }}
+      - name: Start ${{ matrix.os.name }} VM
         uses: cross-platform-actions/action@master
         with:
           operating_system: ${{ matrix.os.name }}
           architecture: ${{ matrix.os.architecture }}
           version: '${{ matrix.os.version }}'
           shell: bash
-          run: |
+
+      - name: ${{ matrix.os.name }}
+        shell: cpa.sh {0}
+        run: |
             sudo pkg_add cmake curl git gmake ninja patchelf poco unzip-6.0p18 zip
             sudo ln -s /usr/local/lib/libcurl.so.26.34 /usr/local/lib/libcurl.so.4
             export PATH="/usr/local/bin:$PATH"

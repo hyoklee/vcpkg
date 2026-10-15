@@ -23,14 +23,17 @@ jobs:
         with:
           repository: hyoklee/vcpkg
 
-      - name: ${{ matrix.os.name }}
+      - name: Start ${{ matrix.os.name }} VM
         uses: cross-platform-actions/action@master
         with:
           operating_system: ${{ matrix.os.name }}
           architecture: ${{ matrix.os.architecture }}
           version: '${{ matrix.os.version }}'
           shell: bash
-          run: |
+
+      - name: ${{ matrix.os.name }}
+        shell: cpa.sh {0}
+        run: |
             sudo pkg install -y cmake git gmake ninja pkgconf poco zip patchelf
             which clang
             which clang++
