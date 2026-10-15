@@ -20,7 +20,7 @@
 	[
 	    {
 		"name": "poco",
-		"features": ["crypto", "net"]
+		"features": ["crypto", "net", "netssl"]
 	    }
 	]
     },
